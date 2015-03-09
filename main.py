@@ -178,6 +178,7 @@ class Gui(object):
         frame = Frame(root)
         frame.pack()
         self.__event = StringVar()
+        self.__event.set("Event Code")
 
         self.__tabs = Notebook(frame)
 
@@ -240,7 +241,8 @@ class Gui(object):
         controls = Frame(frame)
         controls.grid(row=0, column=0, sticky=W+E)
 
-        self.__enEvent = Entry(controls, textvariable=self.__event, width=10)
+        self.__enEvent = Entry(controls, textvariable=self.__event, width=12,
+                               validate='focusin', validatecommand=lambda: self.__event.set(""))
         self.__info = Label(controls, text='?', underline=0)
         self.__btnSave = Button(controls, text='Save Current Tab', command=self.save)
 
