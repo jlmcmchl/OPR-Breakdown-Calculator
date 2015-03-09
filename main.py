@@ -243,6 +243,7 @@ class Gui(object):
 
         self.__enEvent = Entry(controls, textvariable=self.__event, width=12,
                                validate='focusin', validatecommand=lambda: self.__event.set(""))
+        self.__btnEvent = Button(controls, text='Go', command=self.get_event_data_wrapper, width=7)
         self.__info = Label(controls, text='?', underline=0)
         self.__btnSave = Button(controls, text='Save Current Tab', command=self.save)
 
@@ -251,6 +252,7 @@ class Gui(object):
 
         self.__enEvent.pack(side=LEFT)
         self.__info.pack(side=LEFT)
+        self.__btnEvent.pack(side=LEFT)
         self.__btnSave.pack(side=RIGHT, fill=BOTH)
 
     def get_event_data_wrapper(self, *args):
