@@ -316,12 +316,15 @@ class Gui(object):
         for match in self.__matches:
             self.__trMatch.insert('', 'end', values=raw(match))
 
-
     def calc_oprs(self):
         teams = list(rank[1] for rank in self.__ranks[1:])
         opr_L, opr_b, dpr_b = matrices(teams, self.__matches)
-        apr_b, c1pr_b, c2pr_b, lpr_b, tpr_b = zip(*self.__ranks[1:])[3:8]
-
+        try:
+            apr_b, c1pr_b, c2pr_b, lpr_b, tpr_b = zip(*self.__ranks[1:])[3:8]
+        except StandardError:
+            tkMessageBox.showerror('Data Unavailable',
+                                   '\'%s\' has no associated data on Tbe Blue Alliance yet.' % self.__event.get())
+            return 1
         opr_x = cholesky(opr_L, opr_b)
         apr_x = cholesky(opr_L, apr_b)
         c1pr_x = cholesky(opr_L, c1pr_b)
