@@ -14,7 +14,7 @@ Gets the OPR data for any 2015 event.
 
 It saves data to a .csv format so you can easily manipulate the data in Excel or a similar program.
 
-###Furure Plans:
+###Future Plans:
     Caching data for future access via app
 
     Implementation of the last-modified header to minimize bandwidth use
