@@ -232,6 +232,21 @@ class Gui(object):
         self.__tabs.add(matchFrame, text='Matches')
         self.__tabs.add(oprFrame, text='OPR')
 
+        rankScroll = Scrollbar(rankFrame)
+        rankScroll.pack(side=RIGHT, fill=Y)
+        rankScroll.config(command=self.__trRank.yview)
+        self.__trRank.config(yscrollcommand=rankScroll.set)
+
+        matchScroll = Scrollbar(matchFrame)
+        matchScroll.pack(side=RIGHT, fill=Y)
+        matchScroll.config(command=self.__trMatch.yview)
+        self.__trMatch.config(yscrollcommand=matchScroll.set)
+
+        oprScroll = Scrollbar(oprFrame)
+        oprScroll.pack(side=RIGHT, fill=Y)
+        oprScroll.config(command=self.__trOPR.yview)
+        self.__trOPR.config(yscrollcommand=oprScroll.set)
+
         self.__trRank.pack()
         self.__trMatch.pack()
         self.__trOPR.pack()
@@ -256,7 +271,8 @@ class Gui(object):
         self.__btnSave.pack(side=RIGHT, fill=BOTH)
 
     def get_event_data_wrapper(self, *args):
-        self.get_event_data()
+        if self.get_event_data() != 0:
+            return
         self.calc_oprs()
 
     def get_event_data(self):
@@ -265,9 +281,10 @@ class Gui(object):
             self.__matches = make_request('/api/v2/event/2015%s/matches' % self.__event.get().lower())
         except StandardError:
             tkMessageBox.showerror('Data Unavailable',
-                                   '\'%s\' does not have ranking/match data available on TBA.\n'
+                                   '\'%s\' does not have ranking/match data available on The Blue Alliance.\n'
                                    'Check against the \'?\' for the list of events available through TBA.' %
                                    self.__event.get())
+            return 1
         self.__matches = [match for match in self.__matches if match['comp_level'] == 'qm']
         self.__matches.sort(lambda a, b: a['match_number'] - b['match_number'])
 
@@ -277,7 +294,7 @@ class Gui(object):
             for kid in kids:
                 self.__trOPR.delete(kid)
 
-        self.__tabs.select(0)
+        return 0
 
     def load_raw(self):
         for rank in self.__ranks[1:]:
@@ -365,9 +382,10 @@ class Gui(object):
                     f.write(','.join(h[1] for h in self.__prs_header) + '\n')
                     f.write('\n'.join(','.join(map(str, row)) for row in self.__metrics))
 
+
 def main():
     root = Tk()
-    root.title('Event OPR Calculator')
+    root.title('OPR Breakdown Calculator')
     Gui(root)
     root.mainloop()
 
